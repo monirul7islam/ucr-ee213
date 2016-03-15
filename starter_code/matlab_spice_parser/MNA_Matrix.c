@@ -27,6 +27,14 @@ int MatrixSize = 0;	// size of the MNA matrix (i.e., the max dimension)
 double **MNAMatrix = NULL;
 double *RHS = NULL;
 
+int NodeTableSize;
+int nRes;
+int nCap;
+int nInd;
+int nVsrc;
+int nIsrc;
+int nVCCS;
+
 /**
 	Assign indexes to all nodes in the node table.
 	The ground node (with name "0") must be assigned index zero.
@@ -34,7 +42,7 @@ double *RHS = NULL;
 */
 void Index_All_Nodes()
 {
-	MatrixSize = 3;
+	MatrixSize = NodeTableSize + nVsrc ; 
 	
 }
 
@@ -87,9 +95,9 @@ void Init_MNA_System()
 	// Initialize to zero
 	for (i = 0; i <= MatrixSize; i++) {
 		for (j = 0; j <= MatrixSize; j++) {
-			MNAMatrix[i][j] = 10.0;
+			MNAMatrix[i][j] = 0.0;
 		}
-		RHS[i] = 20.0;
+		RHS[i] = 0.0;
 	}
 #endif
 }
@@ -102,8 +110,65 @@ void Init_MNA_System()
 	
 	(!!) Students are required to develop device classes to fulfil this task.
 */
+
+void resolveR(Device_Entry* dev){
+    Node_Entry** nlist = dev->nodelist;
+    double value = dev->value;
+
+    Node_Entry* n;
+    n= *nlist;
+    int idx1 = n->index;
+    n=n->next;
+    int idx2 = n->index;
+
+    if (idx1 >= 0) {
+        MNAMatrix[idx1][idx1] += 1 / value;
+        if (idx2 >= 0) {
+            MNAMatrix[idx2][idx2] += 1 / value;
+            MNAMatrix[idx1][idx2] -= 1 / value;
+            MNAMatrix[idx2][idx1] -= 1 / value;
+        }
+    } else {
+        MNAMatrix[idx2][idx2] += 1 / value;
+    }
+}
+
+void resolveC(Device_Entry* dev){
+
+}
+
+void resolveL(Device_Entry* dev){
+
+}
+
+void resolveI(Device_Entry* dev){
+
+}
+
 void Create_MNA_Matrix()
 {
+Device_Entry* cur = *DeviceTable;
+    while(cur != NULL){
+        char type = (cur->name)[0];
+        switch(type){
+            case 'R' :
+                resolveR(cur);
+                break;
+            case 'C' :
+                resolveC(cur);
+                break;
+            case 'L' :
+                resolveL(cur);
+                break;
+            case 'I' :
+                resolveI(cur);
+                break;
+
+            default:
+                break;
+        }
+        cur = cur->next;
+    }
 }
 
 void Print_MNA_System()
