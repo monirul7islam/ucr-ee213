@@ -47,6 +47,21 @@ void ParseRes(char *name, char *node1, char *node2, double value)
 
 	// Save the device, nodes, value info to the symbol tables.
 	// Please write your own code here ...
+        nodelist = (Node_Entry**) malloc(sizeof(Node_Entry*));
+        Node_Entry* node = malloc(sizeof(Node_Entry));
+        *nodelist = node;
+
+        node->index = 0;
+        node->name = node1;
+        node->next = malloc(sizeof(Node_Entry));
+
+        node = node->next;
+        node->index = 1;
+        node->name = node2;
+        node->next = NULL;
+
+
+        Insert_Device_Entry(name, 2, nodelist, value);
 }
 
 void ParseCap(char *name, char *node1, char *node2, double value)
@@ -60,6 +75,22 @@ void ParseCap(char *name, char *node1, char *node2, double value)
 
 	// Save the device, nodes, value info to the symbol tables.
 	// Please write your own code here ...
+
+ nodelist = (Node_Entry**) malloc(sizeof(Node_Entry*));
+        Node_Entry* node = malloc(sizeof(Node_Entry));
+        *nodelist = node;
+
+        node->index = 0;
+        node->name = node1;
+        node->next = malloc(sizeof(Node_Entry));
+
+        node = node->next;
+        node->index = 1;
+        node->name = node2;
+        node->next = NULL;
+
+
+        Insert_Device_Entry(name, 2, nodelist, value);
 }
 
 void ParseCapIC(char *name, char *node1, char *node2, double value, double init)
@@ -83,6 +114,24 @@ void ParseInd(char *name, char *node1, char *node2, double value)
 
 	// Save the device, nodes, value info to the symbol tables.
 	// Please write your own code here ...
+
+nodelist = (Node_Entry**) malloc(sizeof(Node_Entry*));
+        Node_Entry* node = malloc(sizeof(Node_Entry));
+        *nodelist = node;
+
+        node->index = 0;
+        node->name = node1;
+        node->next = malloc(sizeof(Node_Entry));
+
+        node = node->next;
+	node->index = 1;
+        node->name = node2;
+        node->next = NULL;
+
+
+        Insert_Device_Entry(name, 2, nodelist, value);
+
+
 }
 
 void ParseIndIC(char *name, char *node1, char *node2, double value, double init)
@@ -106,6 +155,24 @@ void ParseVsrc(char *name, char *node1, char *node2, double value)
 
 	// Save the device, nodes, value info to the symbol tables.
 	// Please write your own code here ...
+
+nodelist = (Node_Entry**) malloc(sizeof(Node_Entry*));
+        Node_Entry* node = malloc(sizeof(Node_Entry));
+        *nodelist = node;
+
+        node->index = 0;
+        node->name = node1;
+        node->next = malloc(sizeof(Node_Entry));
+
+        node = node->next;
+        node->index = 1;
+        node->name = node2;
+        node->next = NULL;
+
+
+        Insert_Device_Entry(name, 2, nodelist, value);
+
+
 }
 
 void ParseIsrc(char *name, char *node1, char *node2, double value)
@@ -119,6 +186,23 @@ void ParseIsrc(char *name, char *node1, char *node2, double value)
 
 	// Save the device, nodes, value info to the symbol tables.
 	// Please write your own code here ...
+
+ nodelist = (Node_Entry**) malloc(sizeof(Node_Entry*));
+        Node_Entry* node = malloc(sizeof(Node_Entry));
+        *nodelist = node;
+
+        node->index = 0;
+        node->name = node1;
+        node->next = malloc(sizeof(Node_Entry));
+
+        node = node->next;
+        node->index = 1;
+        node->name = node2;
+        node->next = NULL;
+
+
+        Insert_Device_Entry(name, 2, nodelist, value);
+
 }
 
 void ParseVCCS(char *name, char *node1, char *node2, char *node3, char *node4, double value)
@@ -133,6 +217,31 @@ void ParseVCCS(char *name, char *node1, char *node2, char *node3, char *node4, d
 
 	// Save the device, nodes, value info to the symbol tables.
 	// Please write your own code here ...
+
+nodelist = (Node_Entry**) malloc(sizeof(Node_Entry*));
+        Node_Entry* node = malloc(sizeof(Node_Entry));
+        *nodelist = node;
+
+        node->index = 0;
+        node->name = node1;
+        node->next = malloc(sizeof(Node_Entry));
+
+        node = node->next;
+        node->index = 1;
+        node->name = node2;
+        node->next = malloc(sizeof(Node_Entry));
+
+        node = node->next;
+        node->index = 2;
+        node->name = node3;
+        node->next = malloc(sizeof(Node_Entry));
+
+        node = node->next;
+        node->index = 3;
+        node->name = node4;
+        node->next = NULL;
+
+	Insert_Device_Entry(name, 2, nodelist, value);
 }
 
 
