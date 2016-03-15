@@ -37,6 +37,11 @@ int DeviceTableSize;
 
 void Init_Symbol_Tables()
 {
+NodeTableSize = 0;
+    DeviceTableSize = 0;
+
+    DeviceTable = (Device_Entry **) malloc(sizeof(Device_Entry*));
+    NodeTable = (Node_Entry **) malloc(sizeof(Node_Entry*));
 }
 
 
@@ -49,14 +54,41 @@ void Destroy_Symbol_Table()
 
 void Delete_Node_Table()
 {
+Node_Entry* cur = *NodeTable;
+    while(cur != NULL){
+        Node_Entry* next = cur->next;
+        free(cur);
+        cur = next;
+    }
+
 }
 
 void Delete_Device_Table()
 {
+Device_Entry* cur = *DeviceTable;
+    while(cur != NULL){
+        Device_Entry* next = cur->next;
+        // Free Nodes list for device
+             Node_Entry* n = *(cur->nodelist);
+                 while(n != NULL){
+                      Node_Entry* nx = n->next;
+                      free(n);
+                      n = nx;
+        }
+        free(cur->nodelist);
+        free(cur);
+        cur = next;
+   }
 }
 
 void Delete_Node_Entry(const char *name)
 {
+Node_Entry* cur = *NodeTable;
+    while(cur != NULL){
+        Node_Entry* next = cur->next;
+        free(cur);
+        cur = next;
+    }
 }
 
 void Delete_Device_Entry(const char *name)
@@ -66,7 +98,18 @@ void Delete_Device_Entry(const char *name)
 
 Node_Entry* Lookup_Node_Entry(const char *name)
 {
-	return  NULL;
+if(*name=='0') return NULL; // Should not look for ground node
+
+    Node_Entry* cur = *NodeTable;
+
+    while(cur != NULL){
+        if( *(cur->name) == *name){ // Found match
+            return cur;
+        }
+        cur = cur->next;
+    }
+
+    return  NULL; // No match
 }
 
 
@@ -78,24 +121,87 @@ Device_Entry* Lookup_Device_Entry(const char *name)
 
 Node_Entry* Insert_Node_Entry(const char *name)
 {
-	return NULL;
+Node_Entry* node = Lookup_Node_Entry(name);
+    if(node != NULL) return NULL; //Already exists in table
+
+    // Make new entry
+    Node_Entry* nodeEntry = malloc(sizeof(Node_Entry));
+    nodeEntry->index = NodeTableSize;
+    nodeEntry->name = name;
+    nodeEntry->next = *NodeTable;
+  
+   *NodeTable = nodeEntry;
+    ++NodeTableSize;
+  
+    return nodeEntry;
 }
 
 
 Device_Entry* Insert_Device_Entry(const char *name,  const int numnodes, 
 				Node_Entry **nodelist, const double value)
 {
-	return NULL;
+	Device_Entry* dev = malloc(sizeof(Device_Entry));
+    dev->name = name;
+    dev->numnodes = numnodes;
+    dev->nodelist = nodelist;
+    dev->value = value;
+    dev->next = *DeviceTable;
+
+    *DeviceTable = dev;
+    ++DeviceTableSize;
+
+
+    // Update index of the nodes
+       Node_Entry* node = *nodelist;
+       while(node != NULL){
+           if(*(node->name) == '0'){ // Set index for ground node as -1
+              node->index = -1;
+           }else{
+              Node_Entry* found = Lookup_Node_Entry(node->name);
+              if(found == NULL){ //Node appears the first time, insert new node
+                Node_Entry* newNode = Insert_Node_Entry(node->name);
+                node->index = newNode->index;
+              }else{ //Node exists, copy index
+                node->index = found->index;
+              }
+           }
+           node = node->next;
+      }
+
+    return dev;
 }
 
 
 void Print_Node_Table()
 {
+printf("\nNumber of Nodes: %d", NodeTableSize);
+    if(NodeTableSize >0) {
+        printf("\nList of Nodes:");
+
+        Node_Entry* cur = *NodeTable;
+        while (cur != NULL) {
+            printf("  %s",cur->name);
+            cur = cur->next;
+        }
+        printf("\n");
+    }
 }
 
 
 void Print_Device_Table()
 {
+printf("\nNumber of Devices: %d", DeviceTableSize);
+    if(DeviceTableSize >0) {
+        printf("\nList of Devices:");
+
+        Device_Entry* cur = *DeviceTable;
+        while (cur != NULL) {
+            printf("  %s",cur->name);
+            cur = cur->next;
+        }
+        printf("\n");
+    }
+
 }
 
 
