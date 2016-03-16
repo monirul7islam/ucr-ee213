@@ -37,7 +37,7 @@ int DeviceTableSize;
 
 void Init_Symbol_Tables()
 {
-NodeTableSize = 0;
+    NodeTableSize = 0;
     DeviceTableSize = 0;
 
     DeviceTable = (Device_Entry **) malloc(sizeof(Device_Entry*));
@@ -54,7 +54,7 @@ void Destroy_Symbol_Table()
 
 void Delete_Node_Table()
 {
-Node_Entry* cur = *NodeTable;
+    Node_Entry* cur = *NodeTable;
     while(cur != NULL){
         Node_Entry* next = cur->next;
         free(cur);
@@ -65,7 +65,7 @@ Node_Entry* cur = *NodeTable;
 
 void Delete_Device_Table()
 {
-Device_Entry* cur = *DeviceTable;
+    Device_Entry* cur = *DeviceTable;
     while(cur != NULL){
         Device_Entry* next = cur->next;
         // Free Nodes list for device
@@ -83,7 +83,7 @@ Device_Entry* cur = *DeviceTable;
 
 void Delete_Node_Entry(const char *name)
 {
-Node_Entry* cur = *NodeTable;
+    Node_Entry* cur = *NodeTable;
     while(cur != NULL){
         Node_Entry* next = cur->next;
         free(cur);
@@ -103,7 +103,7 @@ if(*name=='0') return NULL; // Should not look for ground node
     Node_Entry* cur = *NodeTable;
 
     while(cur != NULL){
-        if( *(cur->name) == *name){ // Found match
+        if( strcmp(cur->name,name) == 0){ // Found match
             return cur;
         }
         cur = cur->next;
@@ -121,7 +121,7 @@ Device_Entry* Lookup_Device_Entry(const char *name)
 
 Node_Entry* Insert_Node_Entry(const char *name)
 {
-Node_Entry* node = Lookup_Node_Entry(name);
+    Node_Entry* node = Lookup_Node_Entry(name);
     if(node != NULL) return NULL; //Already exists in table
 
     // Make new entry
@@ -130,7 +130,7 @@ Node_Entry* node = Lookup_Node_Entry(name);
     nodeEntry->name = name;
     nodeEntry->next = *NodeTable;
   
-   *NodeTable = nodeEntry;
+    *NodeTable = nodeEntry;
     ++NodeTableSize;
   
     return nodeEntry;
@@ -140,7 +140,7 @@ Node_Entry* node = Lookup_Node_Entry(name);
 Device_Entry* Insert_Device_Entry(const char *name,  const int numnodes, 
 				Node_Entry **nodelist, const double value)
 {
-	Device_Entry* dev = malloc(sizeof(Device_Entry));
+    Device_Entry* dev = malloc(sizeof(Device_Entry));
     dev->name = name;
     dev->numnodes = numnodes;
     dev->nodelist = nodelist;
@@ -152,48 +152,45 @@ Device_Entry* Insert_Device_Entry(const char *name,  const int numnodes,
 
 
     // Update index of the nodes
-       Node_Entry* node = *nodelist;
-       while(node != NULL){
-           if(*(node->name) == '0'){ // Set index for ground node as -1
-              node->index = -1;
-           }else{
-              Node_Entry* found = Lookup_Node_Entry(node->name);
-              if(found == NULL){ //Node appears the first time, insert new node
-                Node_Entry* newNode = Insert_Node_Entry(node->name);
-                node->index = newNode->index;
-              }else{ //Node exists, copy index
-                node->index = found->index;
-              }
-           }
-           node = node->next;
+    Node_Entry* node = *nodelist;
+    while(node != NULL){
+         if(*(node->name) == '0'){ // Set index for ground node as -1
+            node->index = -1;
+         }else{
+            Node_Entry* found = Lookup_Node_Entry(node->name);
+            if(found == NULL){ //Node appears the first time, insert new node
+              Node_Entry* newNode = Insert_Node_Entry(node->name);
+              node->index = newNode->index;
+            }else{ //Node exists, copy index
+              node->index = found->index;
+             }
+         }
+        node = node->next;
       }
-
     return dev;
 }
 
 
 void Print_Node_Table()
 {
-printf("\nNumber of Nodes: %d", NodeTableSize);
-    if(NodeTableSize >0) {
-        printf("\nList of Nodes:");
-
-        Node_Entry* cur = *NodeTable;
-        while (cur != NULL) {
-            printf("  %s",cur->name);
-            cur = cur->next;
-        }
-        printf("\n");
-    }
+  printf("\nNumber of Nodes: %d", NodeTableSize);
+  if(NodeTableSize > 0) {
+     printf("\nList of Nodes:");
+     Node_Entry* cur = *NodeTable;
+     while (cur != NULL) {
+         printf("  %s(%d)",cur->name,cur->index);
+         cur = cur->next;
+      }
+    printf("\n");
+  }
 }
 
 
 void Print_Device_Table()
 {
-printf("\nNumber of Devices: %d", DeviceTableSize);
-    if(DeviceTableSize >0) {
+  printf("\nNumber of Devices: %d", DeviceTableSize);
+  if(DeviceTableSize > 0) {
         printf("\nList of Devices:");
-
         Device_Entry* cur = *DeviceTable;
         while (cur != NULL) {
             printf("  %s",cur->name);
@@ -201,7 +198,6 @@ printf("\nNumber of Devices: %d", DeviceTableSize);
         }
         printf("\n");
     }
-
 }
 
 

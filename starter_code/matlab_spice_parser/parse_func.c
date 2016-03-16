@@ -130,8 +130,6 @@ nodelist = (Node_Entry**) malloc(sizeof(Node_Entry*));
 
 
         Insert_Device_Entry(name, 2, nodelist, value);
-
-
 }
 
 void ParseIndIC(char *name, char *node1, char *node2, double value, double init)
@@ -171,8 +169,6 @@ nodelist = (Node_Entry**) malloc(sizeof(Node_Entry*));
 
 
         Insert_Device_Entry(name, 2, nodelist, value);
-
-
 }
 
 void ParseIsrc(char *name, char *node1, char *node2, double value)
@@ -202,7 +198,6 @@ void ParseIsrc(char *name, char *node1, char *node2, double value)
 
 
         Insert_Device_Entry(name, 2, nodelist, value);
-
 }
 
 void ParseVCCS(char *name, char *node1, char *node2, char *node3, char *node4, double value)
