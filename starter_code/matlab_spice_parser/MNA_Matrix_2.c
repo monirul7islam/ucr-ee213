@@ -401,26 +401,26 @@ void Print_MNA_System2() {
 
 void Print_MNA_System_to_file() {
     int i, j;
-    FILE *file_A = fopen("MatrixA.csv", "w");
-    FILE *file_B = fopen("VectorB.csv", "w");
-    FILE *file_C = fopen("MatrixC.csv", "w");
+    FILE *file = fopen("outputA.csv", "w");
+    FILE *file2 = fopen("outputRHS.csv", "w");
+    FILE *file3 = fopen("outputC.csv", "w");
 
     for (i = 0; i < MatrixSize; i++) {
         //printf("\n[%-3d]", i);
         for (j = 0; j < MatrixSize; j++) {
-                fprintf(file_A, "%e,", MNAMatrix[i][j]);
-                fprintf(file_C, "%e,", MNAMatrixC[i][j]);
+                fprintf(file, "%e,", MNAMatrix[i][j]);
+                fprintf(file3, "%e,", MNAMatrixC[i][j]);
                 //printf("%s", ',');
             }
-            fprintf(file_A, "\n");
-            fprintf(file_C, "\n");
-            fprintf(file_B, "%e\n", RHS[i]);
+            fprintf(file, "\n");
+            fprintf(file3, "\n");
+            fprintf(file2, "%e\n", RHS[i]);
  
     }
 
-    fclose(file_A);
-    fclose(file_B);
-    fclose(file_C);
+    fclose(file);
+    fclose(file2);
+    fclose(file3);
 }
 
 
